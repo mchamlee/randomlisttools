@@ -29,6 +29,11 @@ class ConsecutiveChars:
         self.the_list = the_list
         self.parsed_list = self.parse_list()
 
+    def __repr__(self):
+        return "ConsecutiveChars({})".format(
+            repr(self.the_list) if self.the_list else ''
+        )
+
     @property
     def the_list(self):
         return self._the_list
