@@ -26,18 +26,8 @@ class RandomChar:
                 return chr(random_char)
 
 
-class RandomNum:
-    """Iterator. Returns random single digit positive integer."""
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        return self._get_random_num()
-
-    @staticmethod
-    def _get_random_num():
-        return randint(0, 9)
+def generate_num_string(length):
+    return ''.join([str(randint(0, 9)) for _ in range(length)])
 
 
 def generate_char_string(length):
