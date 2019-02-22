@@ -27,16 +27,49 @@ class RandomChar:
 
 
 def generate_num_string(length):
+    if length <= 0:
+        raise ValueError("String length should be a positive integer greater than zero")
     return ''.join([str(randint(0, 9)) for _ in range(length)])
 
 
 def generate_char_string(length):
+    if length <= 0:
+        raise ValueError("String length should be a positive integer greater than zero")
     char = RandomChar()
-    return ''.join([next(char) for x in range(length)])
+    return ''.join([next(char) for _ in range(length)])
 
 
 def generate_list_of_strings(string_len, list_len):
+    if list_len <= 0:
+        raise ValueError("List length should be a positive integer greater than zero")
     the_list = []
     for l in range(list_len):
         the_list.append(generate_char_string(string_len))
     return the_list
+
+
+def get_fibonacci_recur(num):
+    if num <= 1:
+        return num
+    else:
+        return get_fibonacci_recur(num - 1) + get_fibonacci_recur(num - 2)
+
+
+def generate_fibonacci_to_nth(nums_to_generate):
+    """Generates Fibonacci sequence to a specified length.
+
+    Args:
+        nums_to_generate: Generate this many numbers in the Fibonacci sequence.
+
+    Returns:
+        A list.
+
+    Raises:
+        ValueError: If nums_to_generate is less than or equal to 0.
+    """
+    if nums_to_generate <= 0:
+        raise ValueError("Please provide a positive integer greater than 0.")
+    fib_seq = []
+    for i in range(nums_to_generate):
+        fib_seq.append(get_fibonacci_recur(i))
+    return fib_seq

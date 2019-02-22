@@ -5,7 +5,7 @@ from io import StringIO
 from contextlib import contextmanager
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from randomlisttools import stringparse
+from randomlisttools import stringparse, stringgenerate
 
 
 @contextmanager
@@ -20,18 +20,18 @@ def captured_output():
 
 
 class TestConsecutiveCharsConsole(unittest.TestCase):
-    def test_return_correct_transform_obj_pos(self):
+    def test_return_correct_transform_obj_positive(self):
         self.assertEqual(stringparse.ConsecutiveChars(['abXyz', 'befgh', 'cFvwX', 'DGjhY']).get_parsed_list(),
                          ['ab', 'yz', 'efgh', 'vw', 'abc', 'FG', 'XY'])
 
-    def test_stdout_correct_transform_print_pos(self):
+    def test_stdout_correct_transform_print_positive(self):
         with captured_output() as (out, err):
             stringparse.ConsecutiveChars(['abXyz', 'befgh', 'cFvwX', 'DGjhY']).print_parsed_list()
 
         output = out.getvalue().strip()
         self.assertEqual(output, "['ab', 'yz', 'efgh', 'vw', 'abc', 'FG', 'XY']")
 
-    def test_return_failure_list_config_neg(self):
+    def test_return_failure_list_config_negative(self):
         with self.assertRaises(ValueError) as context:
             stringparse.ConsecutiveChars(['abXyz', 'bfgh', 'cFvwX', 'DGjhY'])
 
@@ -39,33 +39,33 @@ class TestConsecutiveCharsConsole(unittest.TestCase):
 
 
 class TestConsecutiveCharsTerminal(unittest.TestCase):
-    def test_return_correct_transform_direct_pos(self):
+    def test_return_correct_transform_direct_positive(self):
         self.assertEqual(stringparse.main(['', 'ConsecutiveChars', 'abXyz,befgh,cFvwX,DGjhY']), 0)
 
-    def test_stdout_correct_transform_direct_pos(self):
+    def test_stdout_correct_transform_direct_positive(self):
         with captured_output() as (out, err):
             stringparse.main(['', 'ConsecutiveChars', 'abXyz,befgh,cFvwX,DGjhY'])
 
         output = out.getvalue().strip()
         self.assertEqual(output, "['ab', 'yz', 'efgh', 'vw', 'abc', 'FG', 'XY']")
 
-    def test_return_correct_transform_file_pos(self):
+    def test_return_correct_transform_file_positive(self):
         self.assertEqual(stringparse.main(['', 'ConsecutiveChars', 'array_of_strings.txt']), 0)
 
-    def test_stdout_correct_transform_file_pos(self):
+    def test_stdout_correct_transform_file_positive(self):
         with captured_output() as (out, err):
             stringparse.main(['', 'ConsecutiveChars', 'test_files/array_of_strings.txt'])
 
         output = out.getvalue().strip()
         self.assertEqual(output, "['ab', 'yz', 'efgh', 'vw', 'abc', 'DE', 'FG', 'XY']")
 
-    def test_return_failure_code_missing_param_neg(self):
+    def test_return_failure_code_missing_param_negative(self):
         try:
             stringparse.main([''])
         except SystemExit as e:
             self.assertEqual(e.code, 2)
 
-    # def test_return_failure_msg_missing_param_neg(self):
+    # def test_return_failure_msg_missing_param_negative(self):
     #     with captured_output() as (out, err):
     #         try:
     #             stringparse.main([''])
@@ -76,6 +76,50 @@ class TestConsecutiveCharsTerminal(unittest.TestCase):
     #     self.assertEqual(output, "usage: string_of_arrays_tests.py [-h] string_of_arrays\n"
     #                              "string_of_arrays_tests.py: error: the following arguments "
     #                              "are required: string_of_arrays")
+
+
+class TestStringGenerateGenerateCharString(unittest.TestCase):
+    def test_string_length_positive(self):
+        self.assertEqual(len(stringgenerate.generate_char_string(5)), 5)
+
+    def test_string_length_negative(self):
+        with self.assertRaises(ValueError):
+            stringgenerate.generate_char_string(-1)
+
+
+class TestStringGenerateGenerateNumString(unittest.TestCase):
+    def test_string_length_positive(self):
+        self.assertEqual(len(stringgenerate.generate_num_string(5)), 5)
+
+    def test_string_length_negative(self):
+        with self.assertRaises(ValueError):
+            stringgenerate.generate_num_string(-1)
+
+
+class TestStringGenerateGenerateListOfStrings(unittest.TestCase):
+    string_len = 5
+    list_len = 4
+
+    def test_string_length_positive(self):
+        list_of_strings = stringgenerate.generate_list_of_strings(self.string_len, self.list_len)
+        string_len_test_list = [self.string_len for _ in range(self.list_len)]
+        list_of_strings_str_len = list(map(len, list_of_strings))
+
+        self.assertEqual(list_of_strings_str_len, string_len_test_list)
+
+    def test_list_length_positive(self):
+        list_of_strings = stringgenerate.generate_list_of_strings(self.string_len, self.list_len)
+        list_of_strings_list_len = len(list_of_strings)
+
+        self.assertEqual(self.list_len, list_of_strings_list_len)
+
+    def test_string_length_negative(self):
+        with self.assertRaises(ValueError):
+            stringgenerate.generate_list_of_strings(-1, self.list_len)
+
+    def test_list_length_negative(self):
+        with self.assertRaises(ValueError):
+            stringgenerate.generate_list_of_strings(self.string_len, -1)
 
 
 if __name__ == '__main__':
