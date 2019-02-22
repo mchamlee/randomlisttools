@@ -3,7 +3,11 @@ from random import randint
 
 
 class RandomChar:
-    """Iterator. Returns random upper or lower case character."""
+    """Iterator. Returns random upper or lower case character.
+
+    Returns:
+        A single, random character.
+    """
 
     UPPER = [x for x in range(ord('A'), ord('Z'))]
     LOWER = [y for y in range(ord('a'), ord('z'))]
@@ -40,6 +44,18 @@ def generate_char_string(length):
 
 
 def generate_list_of_strings(string_len, list_len):
+    """Generates a list of uniform alpha-based strings.
+
+    Args:
+        string_len: Length of the strings in the list.
+        list_len: Length of the list, or number of members in the list.
+
+    Returns:
+        A list.
+
+    Raises:
+        ValueError: If list length is less then or equal to 0.
+    """
     if list_len <= 0:
         raise ValueError("List length should be a positive integer greater than zero")
     the_list = []

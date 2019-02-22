@@ -97,19 +97,20 @@ class TestStringGenerateGenerateNumString(unittest.TestCase):
 
 
 class TestStringGenerateGenerateListOfStrings(unittest.TestCase):
-    string_len = 5
-    list_len = 4
+
+    def setUp(self):
+        self.string_len = 5
+        self.list_len = 4
+        self.list_of_strings = stringgenerate.generate_list_of_strings(self.string_len, self.list_len)
 
     def test_string_length_positive(self):
-        list_of_strings = stringgenerate.generate_list_of_strings(self.string_len, self.list_len)
         string_len_test_list = [self.string_len for _ in range(self.list_len)]
-        list_of_strings_str_len = list(map(len, list_of_strings))
+        list_of_strings_str_len = list(map(len, self.list_of_strings))
 
         self.assertEqual(list_of_strings_str_len, string_len_test_list)
 
     def test_list_length_positive(self):
-        list_of_strings = stringgenerate.generate_list_of_strings(self.string_len, self.list_len)
-        list_of_strings_list_len = len(list_of_strings)
+        list_of_strings_list_len = len(self.list_of_strings)
 
         self.assertEqual(self.list_len, list_of_strings_list_len)
 
