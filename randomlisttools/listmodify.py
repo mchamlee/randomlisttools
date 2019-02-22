@@ -12,6 +12,7 @@ def remove_list_dupes_inplace(the_list):
             if the_list.count(the_list[x]) >= 2:
                 for y in range(1, the_list.count(the_list[x])):
                     the_list.remove(the_list[x])
+                    x = x - 1
         except IndexError:
-            return the_list
+            pass
     return the_list
