@@ -5,7 +5,7 @@ from io import StringIO
 from contextlib import contextmanager
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from randomlisttools import stringparse, stringgenerate
+from randomlisttools import stringparse, stringgenerate, listmodify
 
 
 @contextmanager
@@ -121,6 +121,32 @@ class TestStringGenerateGenerateListOfStrings(unittest.TestCase):
     def test_list_length_negative(self):
         with self.assertRaises(ValueError):
             stringgenerate.generate_list_of_strings(self.string_len, -1)
+
+
+class TestListModifyRemoveListDupesInplace(unittest.TestCase):
+    def test_numeric_list_random_dupes_positive(self):
+        test_list = [1, 6, 3, 5, 6, 2, 9, 2, 1, 9, 2, 5, 1, 8, 0, 3, 5, 1, 4, 7, 5, 6]
+        test_list_result = [2, 8, 0, 3, 1, 4, 7, 5, 6]
+        listmodify.remove_list_dupes_inplace(test_list)
+        self.assertEqual(test_list, test_list_result)
+
+    def test_numeric_list_sequential_dupes_positive(self):
+        test_list = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]
+        test_list_result = [1, 2, 3, 4]
+        listmodify.remove_list_dupes_inplace(test_list)
+        self.assertEqual(test_list, test_list_result)
+
+    def test_alpha_list_random_dupes_positive(self):
+        test_list = ['a', 't', 'e', 'a', 'h', 'q', 'c', 'h', 'p', 'i', 'p', 'f']
+        test_list_result = ['t', 'e', 'a', 'q', 'c', 'h', 'i', 'p', 'f']
+        listmodify.remove_list_dupes_inplace(test_list)
+        self.assertEqual(test_list, test_list_result)
+
+    def test_alpha_list_sequential_dupes_positive(self):
+        test_list = ['f', 'f', 'g', 'g', 'g', 'i', 'i', 'i', 'j', 'j', 'j', 'j']
+        test_list_result = ['f', 'g', 'i', 'j']
+        listmodify.remove_list_dupes_inplace(test_list)
+        self.assertEqual(test_list, test_list_result)
 
 
 if __name__ == '__main__':
