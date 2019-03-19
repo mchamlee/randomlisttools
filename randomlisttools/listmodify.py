@@ -1,3 +1,14 @@
+from collections.abc import Iterable
+
+
+def flatten_list(the_list):
+    for i in the_list:
+        if isinstance(i, Iterable) and not isinstance(i, (str, bytes)):
+            yield from flatten_list(i)
+        else:
+            yield i
+
+
 def remove_list_dupes(the_list):
     new_list = []
     for x in range(len(the_list)):
@@ -15,3 +26,16 @@ def remove_list_dupes_inplace(the_list):
             continue
         x += 1
     return the_list
+
+
+def list_replace(the_list, replace_what, replace_with):
+    new_list = []
+    for i in the_list:
+        if isinstance(i, list):
+            new_list.append(list_replace(i, replace_what, replace_with))
+        elif isinstance(i, str):
+            new_list.append(i.replace(replace_what, replace_with))
+        else:
+            new_list.append(i)
+
+    return new_list

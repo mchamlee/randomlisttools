@@ -123,6 +123,16 @@ class TestStringGenerateGenerateListOfStrings(unittest.TestCase):
             stringgenerate.generate_list_of_strings(self.string_len, -1)
 
 
+class TestFlatList(unittest.TestCase):
+    test_list_numeric = [1, [2, 3, [4, 5], 6, [7, [8, [9, 10]], 11, 12]], 13]
+
+    result_list_numeric = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+
+    def test_numeric_list_positive(self):
+        new_list = list(listmodify.flatten_list(self.test_list_numeric))
+        self.assertEqual(new_list, self.result_list_numeric)
+
+
 class TestListModifyRemoveListDupesInplace(unittest.TestCase):
     def test_numeric_list_random_dupes_positive(self):
         test_list = [1, 6, 3, 5, 6, 2, 9, 2, 1, 9, 2, 5, 1, 8, 0, 3, 5, 1, 4, 7, 5, 6]
@@ -147,6 +157,64 @@ class TestListModifyRemoveListDupesInplace(unittest.TestCase):
         test_list_result = ['f', 'g', 'i', 'j']
         listmodify.remove_list_dupes_inplace(test_list)
         self.assertEqual(test_list, test_list_result)
+
+
+class TestListModifyReplace(unittest.TestCase):
+    test_list_alpha = ['ab-cd', 'efgh_ijkl-mnop', 'alpha-element', 'numeric_element']
+
+    test_list_numeric = [1, 6, 100, 5, 3, 10, 34, 9432, 23]
+
+    test_list_alpha_numeric = ['efgh_ijkl-mnop', 356, 34, 'alpha-element', 'numeric_element', 1992, 43, 'ab-cd']
+
+    test_list_alpha_numeric_nested = [
+        'efgh_ijkl-mnop', [
+            356,
+            34
+        ], [
+            'alpha-element', [
+                'numeric_element',
+                1992
+            ],
+            43
+        ],
+        'ab-cd'
+    ]
+
+    result_list_alpha_replace_hyphens_with_underscores = \
+        ['ab_cd', 'efgh_ijkl_mnop', 'alpha_element', 'numeric_element']
+
+    result_list_alpha_numeric_replace_underscores_with_hyphens = \
+        ['efgh-ijkl-mnop', 356, 34, 'alpha-element', 'numeric-element', 1992, 43, 'ab-cd']
+
+    result_list_alpha_numeric_nested_replace_element_with_attribute = [
+        'efgh_ijkl-mnop', [
+            356,
+            34
+        ], [
+            'alpha-attribute', [
+                'numeric_attribute',
+                1992
+            ],
+            43
+        ],
+        'ab-cd'
+    ]
+
+    def test_alpha_list_positive(self):
+        new_list = listmodify.list_replace(self.test_list_alpha, '-', '_')
+        self.assertEqual(new_list, self.result_list_alpha_replace_hyphens_with_underscores)
+
+    def test_numeric_list_positive(self):
+        new_list = listmodify.list_replace(self.test_list_numeric, '-', '_')
+        self.assertEqual(new_list, self.test_list_numeric)
+
+    def test_alpha_numeric_list_positive(self):
+        new_list = listmodify.list_replace(self.test_list_alpha_numeric, '_', '-')
+        self.assertEqual(new_list, self.result_list_alpha_numeric_replace_underscores_with_hyphens)
+
+    def test_alpha_numeric_nested_list_positive(self):
+        new_list = listmodify.list_replace(self.test_list_alpha_numeric_nested, 'element', 'attribute')
+        self.assertEqual(new_list, self.result_list_alpha_numeric_nested_replace_element_with_attribute)
 
 
 if __name__ == '__main__':
