@@ -29,6 +29,16 @@ def remove_list_dupes_inplace(the_list):
 
 
 def list_replace(the_list, replace_what, replace_with):
+    """Replaces char with char for all values in a list.
+
+    Args:
+        the_list: The list on which to perform the replacement.
+        replace_what: The char to replace
+        replace_with: What to replace 'what' with.
+
+    Returns:
+        A list with the values replaced.
+    """
     new_list = []
     for i in the_list:
         if isinstance(i, list):
